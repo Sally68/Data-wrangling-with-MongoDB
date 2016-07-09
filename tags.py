@@ -25,34 +25,24 @@ problemchars = re.compile(r'[=\+/&<>;\'"\?%#$@\,\. \t\r\n]')
 
 def key_type(element, keys):
     if element.tag == "tag":
-        for name, value in element.items():
-            if name == 'k':
-                if lower.search(value):
-                    keys["lower"] += 1
-                elif lower_colon.search(value):
-                    keys["lower_colon"] += 1
-                elif problemchars.search(value):
-<<<<<<< HEAD
-                    try:
-                        print value
-                    except UnicodeEncodeError:
-                        pass
-                    keys["problemchars"] += 1
-                else:
-                    try:
-                        print value
-                    except UnicodeEncodeError:
-                        pass
-=======
-                    keys["problemchars"] += 1
-                else:
->>>>>>> origin/master
-                    keys["other"] += 1
-
+        key = element.get("k")
+        print key,
+        # value = element.get("v")
+        if problemchars.search(key):
+            keys['problemchars'] += 1
+            print '--> problemchars'
+        elif lower_colon.search(key):
+            keys['lower_colon'] += 1
+            print '--> lower_colon'
+        elif lower.search(key):
+            keys['lower'] += 1
+            print '--> lower'
+        else:
+            keys['other'] += 1
+            print '--> other'
     return keys
-
-
-
+    
+    
 def process_map(filename):
     keys = {"lower": 0, "lower_colon": 0, "problemchars": 0, "other": 0}
     for _, element in ET.iterparse(filename):
@@ -61,18 +51,12 @@ def process_map(filename):
     return keys
 
 
-
 def test():
     # You can use another testfile 'map.osm' to look at your solution
     # Note that the assertions will be incorrect then.
-<<<<<<< HEAD
-    keys = process_map('hong-kong.osm')
-    # pprint.pprint(keys)
-=======
-    keys = process_map('hong-kong_china.osm')
+    keys = process_map('example.osm')
     pprint.pprint(keys)
-    # assert keys == {'lower': 5, 'lower_colon': 0, 'other': 1, 'problemchars': 1}
->>>>>>> origin/master
+    assert keys == {'lower': 5, 'lower_colon': 0, 'other': 1, 'problemchars': 1
 
 
 if __name__ == "__main__":
